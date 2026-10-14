@@ -11,49 +11,48 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_qdrant import QdrantVectorStore
 from langchain_core.embeddings import Embeddings
+from qdrant_client import QdrantClient, models
 
-from google import genai
-from google.genai import types
 from pathlib import Path
+from ..llm.router import embed, generate
 
 
 # ===== Load env =====
 load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
-COLLECTION_NAME = os.getenv("QDRANT_COLLECTION", "pdf_collection")
-
-# ===== Init Gemini client =====
-gemini_client = genai.Client(api_key=GEMINI_API_KEY)
-
+QDRANT_URL = os.getenv("QDRANT_URL", "http://qdrant:6333")
+COLLECTION_NAME = os.getenv("QDRANT_COLLECTION", "pdf_collection_openai_small")
+VECTOR_DIMENSIONS = int(os.getenv("VECTOR_DIMENSIONS", "1536"))
 
 # ===== Embedding helpers =====
-def get_gemini_embedding(text: str, dims: int = 768) -> List[float]:
+def get_embedding(text: str, dims: int = VECTOR_DIMENSIONS) -> List[float]:
     """
-    Return embedding vector for given text.
+    Return an embedding vector through the configured LiteLLM alias.
+
+    ``dims`` documents the Qdrant contract. The actual dimensionality is
+    determined by the model configured behind the LiteLLM alias.
     """
-    response = gemini_client.models.embed_content(
-        model="gemini-embedding-001",
-        contents=text,
-        config=types.EmbedContentConfig(output_dimensionality=dims),
-    )
-    # response.embeddings is expected; adjust if SDK differs
-    return response.embeddings[0].values
+    return embed(text)
 
 
-class GeminiEmbeddings(Embeddings):
-    def __init__(self, dims: int = 768):
+class ProviderEmbeddings(Embeddings):
+    """LangChain adapter backed by the fixed ClaimIQ LiteLLM embedding alias."""
+
+    def __init__(self, dims: int = VECTOR_DIMENSIONS):
         self.dims = dims
 
     def embed_documents(self, texts: List[str]) -> List[List[float]]:
-        return [get_gemini_embedding(t, dims=self.dims) for t in texts]
+        return [get_embedding(t, dims=self.dims) for t in texts]
 
     def embed_query(self, text: str) -> List[float]:
-        return get_gemini_embedding(text, dims=self.dims)
+        return get_embedding(text, dims=self.dims)
+
+
+# Backward-compatible import name for callers outside this module.
+GeminiEmbeddings = ProviderEmbeddings
 
 
 # ===== 1) Query expansion with retries, returns list[str] =====
-def create_queries(query: str, max_retries: int = 4, model: str = "gemini-2.5-flash") -> List[str]:
+def create_queries(query: str, max_retries: int = 4, model: str | None = None, provider: str = "gemini") -> List[str]:
     prompt = f"""
 Take the user query below and create 4 different queries:
 - 2 less abstract / more specific versions (include context keywords)
@@ -62,13 +61,7 @@ Return ONLY a JSON array of strings, nothing else.
 User query: {json.dumps(query)}
 """
     for attempt in range(1, max_retries + 1):
-        resp = gemini_client.models.generate_content(
-            model=model,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                system_instruction="Output must be a JSON array of strings.")
-        )
-        raw = resp.text.strip() if hasattr(resp, "text") else ""
+        raw = generate(provider, prompt, model, "Output must be a JSON array of strings.")
         # try to locate JSON substring if there's extra text
         try:
             parsed = json.loads(raw)
@@ -95,7 +88,7 @@ User query: {json.dumps(query)}
 
 
 # ===== 2) Create vector store from PDF (store metadata) =====
-def create_vector_store(file_path: str, collection_name: str = COLLECTION_NAME):
+def create_vector_store(file_path: str, file_id: str | None = None, collection_name: str = COLLECTION_NAME):
     loader = PyPDFLoader(file_path)
     documents = loader.load()
     print(f"Loaded {len(documents)} page-like documents from {file_path}")
@@ -111,8 +104,10 @@ def create_vector_store(file_path: str, collection_name: str = COLLECTION_NAME):
         d.metadata = d.metadata or {}
         d.metadata["_chunk_id"] = str(uuid.uuid4())
         d.metadata["source_document"] = os.path.basename(file_path)
+        if file_id:
+            d.metadata["file_id"] = file_id
 
-    embedding = GeminiEmbeddings(dims=768)
+    embedding = ProviderEmbeddings(dims=VECTOR_DIMENSIONS)
     vector_store = QdrantVectorStore.from_documents(
         split_docs,
         embedding=embedding,
@@ -124,7 +119,7 @@ def create_vector_store(file_path: str, collection_name: str = COLLECTION_NAME):
 
 # ===== 3) Search vector store (reusable) =====
 def search_vector_store(query: str, top_k: int = 3, collection_name: str = COLLECTION_NAME):
-    embedding = GeminiEmbeddings(dims=768)
+    embedding = ProviderEmbeddings(dims=VECTOR_DIMENSIONS)
     retriever = QdrantVectorStore.from_existing_collection(
         collection_name=collection_name,
         embedding=embedding,
@@ -148,7 +143,7 @@ def merge_unique_chunks(results_list: List[Any]) -> List[Any]:
 
 
 # ===== 5) Rerank using Gemini (ask Gemini to output JSON scores) =====
-def rerank_with_gemini(query: str, chunks: List[Any], max_retries: int = 3, model: str = "gemini-2.5-flash") -> List[Dict]:
+def rerank_with_gemini(query: str, chunks: List[Any], max_retries: int = 3, model: str | None = None, provider: str = "gemini") -> List[Dict]:
     """
     Input: query and list of chunk objects (must have .page_content and .metadata['_chunk_id'])
     Output: list of dicts: [{chunk_id, score, page_content, metadata}, ...] sorted descending by score
@@ -176,13 +171,7 @@ Return ONLY a JSON array of floats like: [0.12, 0.9, ...] with exactly one float
 """
 
     for attempt in range(1, max_retries + 1):
-        resp = gemini_client.models.generate_content(
-            model=model,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                system_instruction="Output must be a JSON array of floats.")
-        )
-        raw = resp.text.strip() if hasattr(resp, "text") else ""
+        raw = generate(provider, prompt, model, "Output must be a JSON array of floats.")
         try:
             scores = json.loads(raw)
             if isinstance(scores, list) and len(scores) == len(candidates):
@@ -244,7 +233,7 @@ Return ONLY a JSON array of floats like: [0.12, 0.9, ...] with exactly one float
 
 
 # ===== 6) Generate final answer with Gemini LLM constrained to provided chunks =====
-def generate_answer_with_gemini(query: str, top_chunks: List[Dict], model: str = "gemini-2.5-flash", max_retries: int = 3) -> Dict[str, Any]:
+def generate_answer_with_gemini(query: str, top_chunks: List[Dict], model: str | None = None, max_retries: int = 3, provider: str = "gemini") -> Dict[str, Any]:
     """
     top_chunks: list of dicts produced by rerank_with_gemini (chunk_id, page_content, metadata)
     Returns a dict: {answer: str, explanation: str, evidence: [...]}
@@ -278,13 +267,7 @@ Return ONLY this JSON object.
 """
 
     for attempt in range(1, max_retries + 1):
-        resp = gemini_client.models.generate_content(
-            model=model,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                system_instruction="Output must be a single JSON object.")
-        )
-        raw = resp.text.strip() if hasattr(resp, "text") else ""
+        raw = generate(provider, prompt, model, "Output must be a single JSON object.")
         try:
             parsed = json.loads(raw)
             return parsed
@@ -418,7 +401,7 @@ def rag_pipeline(user_query: str, applicant_context: Dict[str, Any] = None, top_
     }
 
 
-def put_pdf(pdf_path: str) -> Dict[str, Any]:
+def put_pdf(pdf_path: str, file_id: str | None = None) -> Dict[str, Any]:
     """
     High-level function to load, chunk, embed, and store a PDF in Qdrant.
 
@@ -433,7 +416,7 @@ def put_pdf(pdf_path: str) -> Dict[str, Any]:
         raise FileNotFoundError(f"PDF not found: {pdf_path}")
 
     # Run the existing vector store creation logic
-    create_vector_store(str(pdf_file))
+    create_vector_store(str(pdf_file), file_id=file_id)
 
     return {
         "status": "success",
@@ -442,20 +425,42 @@ def put_pdf(pdf_path: str) -> Dict[str, Any]:
     }
 
 
+def delete_document_vectors(file_id: str, collection_name: str = COLLECTION_NAME) -> None:
+    """Remove vectors written for one cancelled document from Qdrant."""
+    client = QdrantClient(url=QDRANT_URL)
+    client.delete(
+        collection_name=collection_name,
+        points_selector=models.FilterSelector(
+            filter=models.Filter(
+                must=[models.FieldCondition(
+                    key="metadata.file_id", match=models.MatchValue(value=file_id)
+                )]
+            )
+        ),
+    )
+
+
 #
-def retrieve(user_query: str, top_k: int = 3) -> Dict[str, Any]:
+def retrieve(
+    user_query: str,
+    top_k: int = 3,
+    provider: str = "gemini",
+    model: str | None = None,
+) -> Dict[str, Any]:
     """
     High-level function to search Qdrant for a user query and summarize with Gemini.
     """
     # Step 1: Expand the query
-    expanded_queries = create_queries(user_query)
+    expanded_queries = create_queries(user_query, provider=provider, model=model)
 
-    # Step 2: Search each variation in Qdrant
+    # Chat providers can change per question, but retrieval must use the same
+    # embedding alias that indexed the shared Qdrant collection.
     all_results = []
     for q in expanded_queries:
         all_results.extend(search_vector_store(q, top_k=top_k))
 
-    # Step 3: Merge duplicate chunks
+    # Query variants often find the same passages. Include each passage once
+    # so repeated hits do not crowd other evidence out of the answer prompt.
     unique_chunks = merge_unique_chunks(all_results)
 
     # Step 4: Prepare context text from retrieved chunks
@@ -473,15 +478,13 @@ def retrieve(user_query: str, top_k: int = 3) -> Dict[str, Any]:
 
     If the answer cannot be found in the context, say "Not enough information."
     """
-    gemini_response = gemini_client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=gemini_prompt
-    )
-    final_answer = gemini_response.text.strip()
+    final_answer = generate(provider, gemini_prompt, model)
 
     # Step 6: Return clean JSON with final answer
     return {
         "query": user_query,
+        "provider": provider,
+        "model": model,
         "expanded_queries": expanded_queries,
         "results": [
             {
