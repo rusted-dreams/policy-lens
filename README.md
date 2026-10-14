@@ -134,7 +134,7 @@ Upload your documents and ask questions in plain English:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/rusted-dreams/claim-iq.git
+git clone https://github.com/rusted-dreams/Claim-IQ.git
 cd ClaimIQ
 
 # 2. Set up backend
@@ -542,15 +542,24 @@ Built with powerful open-source tools:
 
 ## 📧 Contact & Support
 
-**Shubhomkar Mahato**
+**rusted-dreams**
 
 - 🐙 GitHub: [@rusted-dreams](https://github.com/rusted-dreams)
-- 📧 Email: shubhomkar.dev@gmail.com
-- 🔗 Project: [ClaimIQ](https://github.com/rusted-dreams/claim-iq)
+- 📧 Email: 123829783+rusted-dreams@users.noreply.github.com
+- 🔗 Project: [ClaimIQ](https://github.com/rusted-dreams/Claim-IQ)
 
 ---
 
 <div align="center">
 
+### ⭐ Star us on GitHub if ClaimIQ helps you!
+
+**Making insurance documents understandable, one claim at a time** 📋✨
+
+[Report Bug](https://github.com/rusted-dreams/Claim-IQ/issues) · [Request Feature](https://github.com/rusted-dreams/Claim-IQ/issues) · [Discussions](https://github.com/rusted-dreams/Claim-IQ/discussions)
+
+---
+
+*Built with ❤️ for insurance professionals, adjusters, and anyone dealing with complex claims*
 
 </div>
