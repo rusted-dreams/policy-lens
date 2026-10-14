@@ -71,7 +71,7 @@ const panelContent: Record<InfoPanel, { title: string; description: string; sect
   },
   team: {
     title: 'Our team',
-    description: 'PolicyLens is built and maintained by rusted-dreams. The project focuses on making complex policy and claim documents easier to search, understand, and use.',
+    description: 'PolicyLens is maintained by rusted-dreams. The project focuses on making complex policy and claim documents easier to search, understand, and use.',
   },
 }
 

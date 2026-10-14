@@ -460,7 +460,7 @@ We welcome contributions! Here's how to get started:
 
 ```bash
 # Fork the repository
-git clone https://github.com/YOUR_USERNAME/Claim-IQ.git policylens
+git clone https://github.com/rusted-dreams/Claim-IQ.git policylens
 cd policylens
 
 # Create a feature branch
@@ -545,7 +545,7 @@ Built with powerful open-source tools:
 **rusted-dreams**
 
 - 🐙 GitHub: [@rusted-dreams](https://github.com/rusted-dreams)
-- 📧 Email: 123829783+rusted-dreams@users.noreply.github.com
+- 📧 Email: [123829783+rusted-dreams@users.noreply.github.com](mailto:123829783+rusted-dreams@users.noreply.github.com)
 - 🔗 Project: [PolicyLens](https://github.com/rusted-dreams/Claim-IQ)
 
 ---
