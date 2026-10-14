@@ -1,4 +1,4 @@
-# ClaimIQ frontend
+# PolicyLens frontend
 
 React and Vite serve the landing page at `/` and the document chat workspace at
 `/chat`. The landing page uses TypeScript; the existing chat components use JSX.

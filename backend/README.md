@@ -1,4 +1,4 @@
-# ClaimIQ - FastAPI Application
+# PolicyLens - FastAPI Application
 
 A FastAPI application for file processing and AI-powered querying with MongoDB, Redis/Valkey, Qdrant, and a LiteLLM gateway.
 
@@ -19,8 +19,8 @@ A FastAPI application for file processing and AI-powered querying with MongoDB, 
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd claimIQ
+git clone <repository-url> policylens
+cd policylens/backend
 ```
 
 2. Copy the environment file and configure:
@@ -76,6 +76,13 @@ docker-compose -f docker-compose.prod.yml up --build -d
 
 ## Updating an older checkout
 
+The application is now named PolicyLens. LiteLLM aliases use the `policylens-`
+prefix and optional development port overrides use `POLICYLENS_`. When updating
+an existing `.env`, copy the corresponding alias settings from `.env.example`.
+Keep `LITELLM_API_KEY` and the gateway's master key in sync.
+The rename keeps the existing Qdrant collection name, so the branding change
+alone does not require re-indexing documents.
+
 The API now sends chat and embedding requests through LiteLLM. Configure both
 the gateway's provider credentials and `LITELLM_API_KEY` before starting the
 services. For the default setup, the application key and `LITELLM_MASTER_KEY`
@@ -128,7 +135,7 @@ non-empty conversation history.
 |----------|-------------|---------|
 | `GEMINI_API_KEY` | Gemini key used by LiteLLM | Optional, depending on configured models |
 | `OPENAI_API_KEY` | OpenAI key used by LiteLLM | Optional, depending on configured models |
-| `LITELLM_API_KEY` | Key used by ClaimIQ to call the proxy; use the master key unless virtual keys are configured | Required |
+| `LITELLM_API_KEY` | Key used by PolicyLens to call the proxy; use the master key unless virtual keys are configured | Required |
 | `LITELLM_MASTER_KEY` | Key used by the LiteLLM proxy | Required |
 | `LITELLM_BASE_URL` | Internal proxy URL | `http://litellm:4000` |
 | `VECTOR_EMBEDDING_PROVIDER` | Embedding alias selection | `openai` |

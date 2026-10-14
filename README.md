@@ -1,4 +1,4 @@
-# 📋 ClaimIQ
+# 📋 PolicyLens
 
 > **Smart Claims Understanding System** | Navigate insurance documents intelligently with AI-powered insights
 
@@ -21,9 +21,9 @@
 
 ---
 
-## 🌟 What is ClaimIQ?
+## 🌟 What is PolicyLens?
 
-ClaimIQ transforms the painful process of understanding insurance claims into an intelligent, conversational experience. Upload your insurance documents and instantly get answers to complex questions—no more manual searching through pages of legal jargon.
+PolicyLens transforms the painful process of understanding insurance claims into an intelligent, conversational experience. Upload your insurance documents and instantly get answers to complex questions—no more manual searching through pages of legal jargon.
 
 ### 💡 The Problem
 
@@ -33,7 +33,7 @@ Insurance claims are:
 - 🤯 **Confusing** - Technical terminology and cross-references
 - 📊 **Hard to Compare** - Multiple documents with different formats
 
-### ✨ The ClaimIQ Solution
+### ✨ The PolicyLens Solution
 
 Upload your documents and ask questions in plain English:
 - *"What's the maximum coverage for water damage?"*
@@ -74,7 +74,7 @@ Upload your documents and ask questions in plain English:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    ClaimIQ System                       │
+│                    PolicyLens System                       │
 ├─────────────────────────────────────────────────────────┤
 │                                                         │
 │  ┌──────────────┐      ┌──────────────┐              │
@@ -134,8 +134,8 @@ Upload your documents and ask questions in plain English:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/rusted-dreams/Claim-IQ.git
-cd ClaimIQ
+git clone https://github.com/rusted-dreams/Claim-IQ.git policylens
+cd policylens
 
 # 2. Set up backend
 cd backend
@@ -460,8 +460,8 @@ We welcome contributions! Here's how to get started:
 
 ```bash
 # Fork the repository
-git clone https://github.com/YOUR_USERNAME/ClaimIQ.git
-cd ClaimIQ
+git clone https://github.com/YOUR_USERNAME/Claim-IQ.git policylens
+cd policylens
 
 # Create a feature branch
 git checkout -b feature/amazing-feature
@@ -546,17 +546,17 @@ Built with powerful open-source tools:
 
 - 🐙 GitHub: [@rusted-dreams](https://github.com/rusted-dreams)
 - 📧 Email: 123829783+rusted-dreams@users.noreply.github.com
-- 🔗 Project: [ClaimIQ](https://github.com/rusted-dreams/Claim-IQ)
+- 🔗 Project: [PolicyLens](https://github.com/rusted-dreams/Claim-IQ)
 
 ---
 
 <div align="center">
 
-### ⭐ Star us on GitHub if ClaimIQ helps you!
+### ⭐ Star us on GitHub if PolicyLens helps you!
 
 **Making insurance documents understandable, one claim at a time** 📋✨
 
-[Report Bug](https://github.com/rusted-dreams/Claim-IQ/issues) · [Request Feature](https://github.com/rusted-dreams/Claim-IQ/issues) · [Discussions](https://github.com/rusted-dreams/Claim-IQ/discussions)
+[Report Bug](https://github.com/rusted-dreams/Claim-IQ/issues) · [Request Feature](https://github.com/rusted-dreams/Claim-IQ/issues)
 
 ---
 

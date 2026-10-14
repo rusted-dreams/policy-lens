@@ -23,12 +23,12 @@ const navLinks: NavLink[] = [
 
 const panelContent: Record<InfoPanel, { title: string; description: string; sections?: Array<{ heading: string; items: string[] }> }> = {
   project: {
-    title: 'About Claim IQ',
-    description: 'Claim IQ is a document intelligence assistant. Upload policy and claim PDFs, build a searchable knowledge base, and receive answers grounded in the documents you have indexed.',
+    title: 'About PolicyLens',
+    description: 'PolicyLens is a document intelligence assistant. Upload policy and claim PDFs, build a searchable knowledge base, and receive answers grounded in the documents you have indexed.',
   },
   technology: {
     title: 'Technology & architecture',
-    description: 'Claim IQ is built as a document intelligence platform with a browser client, an API and background-processing layer, and dedicated data services.',
+    description: 'PolicyLens is built as a document intelligence platform with a browser client, an API and background-processing layer, and dedicated data services.',
     sections: [
       {
         heading: 'Frontend',
@@ -71,7 +71,7 @@ const panelContent: Record<InfoPanel, { title: string; description: string; sect
   },
   team: {
     title: 'Our team',
-    description: 'Claim IQ is built and maintained by rusted-dreams. The project focuses on making complex policy and claim documents easier to search, understand, and use.',
+    description: 'PolicyLens is built and maintained by rusted-dreams. The project focuses on making complex policy and claim documents easier to search, understand, and use.',
   },
 }
 
@@ -143,9 +143,9 @@ export default function App() {
       <video className="absolute inset-0 w-full h-full object-cover" autoPlay muted loop playsInline src={BG_VIDEO} />
 
       <nav className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-5 sm:px-8 py-5">
-        <a href="/" onClick={openHome} className="flex items-center gap-2 text-white font-medium text-base" aria-label="Equilibrium home">
+        <a href="/" onClick={openHome} className="flex items-center gap-2 text-white font-medium text-base" aria-label="PolicyLens home">
           <Infinity size={22} strokeWidth={1.5} />
-          <span>Claim IQ</span>
+          <span>PolicyLens</span>
         </a>
 
         <div className="hidden md:flex liquid-glass items-center gap-1 rounded-xl px-2 py-2">
@@ -192,7 +192,7 @@ export default function App() {
           <section className="liquid-glass w-full max-w-3xl max-h-[85vh] overflow-y-auto rounded-2xl p-6 sm:p-8 text-white">
             <div className="flex items-start justify-between gap-5">
               <div>
-                <p className="text-white/55 text-sm mb-2">Claim IQ</p>
+                <p className="text-white/55 text-sm mb-2">PolicyLens</p>
                 <h2 id="info-panel-title" className="text-2xl sm:text-3xl font-medium tracking-tight">{panelContent[infoPanel].title}</h2>
               </div>
               <button type="button" onClick={() => setInfoPanel(null)} className="liquid-glass p-2 rounded-lg text-white hover:bg-white/5 transition-colors" aria-label="Close information panel"><X size={18} /></button>

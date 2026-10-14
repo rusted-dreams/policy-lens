@@ -1,6 +1,6 @@
 """Provider-neutral generation and embedding helpers.
 
-ClaimIQ talks to a self-hosted LiteLLM Proxy through its OpenAI-compatible API.
+PolicyLens talks to a self-hosted LiteLLM Proxy through its OpenAI-compatible API.
 The proxy owns provider-specific authentication and request translation; this
 module owns only the small application contract used by the API and RAG code.
 
@@ -20,16 +20,16 @@ load_dotenv()
 
 # These are LiteLLM model aliases, not provider-native model IDs. The aliases
 # are defined in backend/litellm_config.yaml and can be remapped there without
-# changing ClaimIQ code.
+# changing PolicyLens code.
 DEFAULT_MODELS = {
-    "gemini": os.getenv("LITELLM_GEMINI_MODEL", "claimiq-chat-gemini"),
-    "openai": os.getenv("LITELLM_OPENAI_MODEL", "claimiq-chat-openai"),
-    "bedrock": os.getenv("LITELLM_BEDROCK_MODEL", "claimiq-chat-bedrock"),
+    "gemini": os.getenv("LITELLM_GEMINI_MODEL", "policylens-chat-gemini"),
+    "openai": os.getenv("LITELLM_OPENAI_MODEL", "policylens-chat-openai"),
+    "bedrock": os.getenv("LITELLM_BEDROCK_MODEL", "policylens-chat-bedrock"),
 }
 
 DEFAULT_EMBEDDING_MODELS = {
-    "gemini": os.getenv("LITELLM_GEMINI_EMBEDDING_MODEL", "claimiq-embedding-gemini"),
-    "openai": os.getenv("LITELLM_OPENAI_EMBEDDING_MODEL", "claimiq-embedding-openai"),
+    "gemini": os.getenv("LITELLM_GEMINI_EMBEDDING_MODEL", "policylens-embedding-gemini"),
+    "openai": os.getenv("LITELLM_OPENAI_EMBEDDING_MODEL", "policylens-embedding-openai"),
 }
 
 

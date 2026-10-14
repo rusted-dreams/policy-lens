@@ -16,7 +16,7 @@ from bson import ObjectId
 from rq.job import Job
 from rq.command import send_stop_job_command
 
-app = FastAPI()
+app = FastAPI(title="PolicyLens API", description="Document indexing and policy knowledge-base chat.")
 
 app.add_middleware(
     CORSMiddleware,

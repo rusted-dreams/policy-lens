@@ -1,5 +1,5 @@
 {
-  "name": "version2",
+  "name": "PolicyLens",
   "dockerComposeFile": "docker-compose.yaml",
   "service": "app",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",

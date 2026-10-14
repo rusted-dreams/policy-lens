@@ -1,1 +1,1 @@
-"""LLM provider abstractions for ClaimIQ."""
+"""LLM provider abstractions for PolicyLens."""

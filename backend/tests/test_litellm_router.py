@@ -80,7 +80,7 @@ class LiteLLMRouterTests(unittest.TestCase):
 
         self.assertEqual(result, "proxy answer")
         self.assertEqual(self.client.kwargs["base_url"], "http://litellm:4000")
-        self.assertEqual(self.client.completions.calls[0]["model"], "claimiq-chat-gemini")
+        self.assertEqual(self.client.completions.calls[0]["model"], "policylens-chat-gemini")
         self.assertEqual(self.client.completions.calls[0]["messages"][0]["role"], "system")
 
     def test_embed_uses_configured_embedding_alias(self):
@@ -97,7 +97,7 @@ class LiteLLMRouterTests(unittest.TestCase):
         self.assertEqual(result, [0.1, 0.2, 0.3])
         self.assertEqual(
             self.client.embeddings.calls[0]["model"],
-            "claimiq-embedding-openai",
+            "policylens-embedding-openai",
         )
 
     def test_missing_proxy_key_fails_before_network_call(self):

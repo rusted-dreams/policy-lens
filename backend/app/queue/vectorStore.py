@@ -35,7 +35,7 @@ def get_embedding(text: str, dims: int = VECTOR_DIMENSIONS) -> List[float]:
 
 
 class ProviderEmbeddings(Embeddings):
-    """LangChain adapter backed by the fixed ClaimIQ LiteLLM embedding alias."""
+    """LangChain adapter backed by the fixed PolicyLens LiteLLM embedding alias."""
 
     def __init__(self, dims: int = VECTOR_DIMENSIONS):
         self.dims = dims

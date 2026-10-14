@@ -146,7 +146,7 @@ const Home = () => {
       <video className="workspace-video" autoPlay muted loop playsInline src={BG_VIDEO} />
       <div className="workspace-backdrop" />
       <aside className="sidebar">
-        <a className="brand" href="/" aria-label="Equilibrium home"><span>∞</span> Equilibrium</a>
+        <a className="brand" href="/" aria-label="PolicyLens home"><span>∞</span> PolicyLens</a>
         <p className="brand-subtitle">Knowledge companion</p>
         <button className="new-chat-button" onClick={startNewChat}>＋ <span>New chat</span></button>
 
@@ -180,7 +180,7 @@ const Home = () => {
             </button>
           ))}
         </nav>
-        <div className="sidebar-footer">ClaimIQ · Document intelligence</div>
+        <div className="sidebar-footer">PolicyLens · Document intelligence</div>
       </aside>
 
       <main className="workspace-main">
