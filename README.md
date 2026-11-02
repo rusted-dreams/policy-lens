@@ -134,7 +134,7 @@ Upload your documents and ask questions in plain English:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/rusted-dreams/Claim-IQ.git policylens
+git clone https://github.com/rusted-dreams/policy-lens.git policylens
 cd policylens
 
 # 2. Set up backend
@@ -460,7 +460,7 @@ We welcome contributions! Here's how to get started:
 
 ```bash
 # Fork the repository
-git clone https://github.com/rusted-dreams/Claim-IQ.git policylens
+git clone https://github.com/rusted-dreams/policy-lens.git policylens
 cd policylens
 
 # Create a feature branch
@@ -546,7 +546,7 @@ Built with powerful open-source tools:
 
 - 🐙 GitHub: [@rusted-dreams](https://github.com/rusted-dreams)
 - 📧 Email: [shubhomkar.dev@gmail.com](mailto:shubhomkar.dev@gmail.com)
-- 🔗 Project: [PolicyLens](https://github.com/rusted-dreams/Claim-IQ)
+- 🔗 Project: [PolicyLens](https://github.com/rusted-dreams/policy-lens)
 
 ---
 
@@ -556,7 +556,7 @@ Built with powerful open-source tools:
 
 **Making insurance documents understandable, one claim at a time** 📋✨
 
-[Report Bug](https://github.com/rusted-dreams/Claim-IQ/issues) · [Request Feature](https://github.com/rusted-dreams/Claim-IQ/issues)
+[Report Bug](https://github.com/rusted-dreams/policy-lens/issues) · [Request Feature](https://github.com/rusted-dreams/policy-lens/issues)
 
 ---
 
