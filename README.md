@@ -545,7 +545,7 @@ Built with powerful open-source tools:
 **rusted-dreams**
 
 - 🐙 GitHub: [@rusted-dreams](https://github.com/rusted-dreams)
-- 📧 Email: [123829783+rusted-dreams@users.noreply.github.com](mailto:123829783+rusted-dreams@users.noreply.github.com)
+- 📧 Email: [shubhomkar.dev@gmail.com](mailto:shubhomkar.dev@gmail.com)
 - 🔗 Project: [PolicyLens](https://github.com/rusted-dreams/Claim-IQ)
 
 ---
